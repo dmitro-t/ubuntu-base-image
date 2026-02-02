@@ -1,0 +1,51 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+#Load key from .env file
+if File.exist?(".env")
+  File.foreach(".env") do |line|
+    next if line.strip.empty? || line.start_with?("#")
+    key, value = line.strip.split('=', 2)
+    ENV[key] = value if key && value
+  end
+end
+
+Vagrant.configure("2") do |config|
+
+  #Vagrant box which created in project folder 'vagrant box add ...'
+  config.vm.box = "vbox-ubuntu"
+
+  config.ssh.username = "ubuntu"
+  config.ssh.private_key_path = ENV['VAGRANT_SSH_PRIV_KEY']
+
+  config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
+  
+  # documentation for more information about their specific syntax and use.
+  config.vm.provision "shell", inline: <<-SHELL
+  export DEBIAN_FRONTEND=noninteractive
+  apt-get update
+  #Installing Nginx, MySQL, PHP-FPM
+  apt-get install -y nginx mysql-server php8.1-fpm php-mysql
+  #Configuring Nginx to Use the PHP Processor
+  cat <<EOF > /etc/nginx/sites-available/default
+server {
+  listen 80;
+  root /var/www/html;
+  index index.php index.html index.htm;
+  server_name _;
+
+  location / {
+    try_files \$uri \$uri/ =404;
+  }
+
+  location ~ \.php$ {
+    include snippets/fastcgi-php.conf;
+    fastcgi_pass unix:/run/php/php8.1-fpm.sock;
+  }
+} 
+EOF
+  chown -R ubuntu:ubuntu /var/www/html
+  echo "<?php phpinfo(); ?>" > /var/www/html/info.php
+  systemctl restart nginx
+  SHELL
+end

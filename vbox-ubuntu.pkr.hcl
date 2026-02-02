@@ -4,6 +4,11 @@ packer {
       version = "~> 1"
       source  = "github.com/hashicorp/virtualbox"
     }
+    #Plugin Vagrant
+    vagrant = {
+      version = "~> 1"
+      source  = "github.com/hashicorp/vagrant"
+    }
   }
 }
 
@@ -71,5 +76,9 @@ build {
       "sudo -E apt-get -y -o Dpkg::Options::='--force-confdef' -o Dpkg::Options::='--force-confold' upgrade",
       "sudo -E apt-get install -y virtualbox-guest-utils"
     ]
+  }
+  #Creates vagrant box based on .ovf and .vmdk
+  post-processor "vagrant" {
+    output = "ubuntu.box"
   }  
 }

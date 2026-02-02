@@ -3,7 +3,12 @@ packer_cache/
 output/
 *.ovf
 *.vmdk
+*.box
 vars.hcl
+
+#Vagrant
+ubuntu-lemp/.vagrant
+ubuntu-lemp/*.env
 
 #SSH
 id_ed25519*
