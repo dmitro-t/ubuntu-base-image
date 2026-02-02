@@ -1,23 +1,22 @@
-## Ubuntu base image with Packer
-Automated Ubuntu 22.04 image build using Packer, VirtualBox and cloud-init autoinstall
-
-## Tech stack
-- Packer
-- VirtualBox
-- Ubuntu Server 22.04
-- cloud-init (autoinstall)
-- SSH provisioning
-
-## Features
-- Fully automated installation
-- cloud-init autoinstall
-- SSH access via key
-- Base system provisioning
-- Golden Image concept
+## Installing LEMP stack with Vagrant 
+Initial installing Nginx server, MySQL server, PHP8.1-fpm
 
 ## Build
 ```bash
 packer init .
 packer validate .
 packer build -var-file="vars.hcl" .
+```
+
+## Create Vagrant box
+```bash
+vagrant init vbox-ubuntu
+vagrant box add vbox-ubuntu ./ubuntu.box
+vagrant box list
+```
+
+## Run VM
+```bash
+cd .\ubuntu-lemp
+vagrant up
 ```
