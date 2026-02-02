@@ -1,0 +1,3 @@
+ssh_pub_key = "PASTE YOUR PUBLIC KEY" 
+ssh_priv_key_file = "./PATH/TO/PRIVATE/KEY"
+user_password_hash = "PASTE HASH PASSWORD"

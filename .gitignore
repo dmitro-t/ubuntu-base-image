@@ -1,0 +1,9 @@
+#Packer
+packer_cache/
+output/
+*.ovf
+*.vmdk
+vars.hcl
+
+#SSH
+id_ed25519*
